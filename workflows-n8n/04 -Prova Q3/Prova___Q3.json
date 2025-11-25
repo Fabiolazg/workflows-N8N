@@ -1,0 +1,348 @@
+{
+  "name": "Prova - Q3",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "65393a3d-76b1-445f-a49a-d47f6c8737a9",
+      "name": "When chat message received",
+      "webhookId": "5eef82fc-a797-4cf4-b1fc-69a838ef1c59"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Você será como um vendedor. Toda vez que um usuário vier até você, você deve perguntar o nome e o telefone e ver se ele já é cliente ou não utilizando a planilha CLIENTES.\n\nPara ficar mais organizado, pergunte primeiro o nome espere responder e depois pergunte o telefone.\nSe já for cliente, informe os valores dos equipamentos que está na planilha PRODUTOS.\nSenão, faça o cadastro do cliente com os dados fornecidos no atendimento inicial e mande um email para o financeiro por meio da ferramenta gmail que já está configurado."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        220,
+        0
+      ],
+      "id": "700ce28d-59e8-4687-9801-5e2263469e96",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        200
+      ],
+      "id": "ea17c1c8-f36b-4a69-a1f3-86ca09189bc3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "bbXp2MlMF9OxMXDv",
+          "name": "OpenAi account 37"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        200
+      ],
+      "id": "aa5398e1-e56f-4e7c-b675-84309b25e394",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc",
+          "mode": "list",
+          "cachedResultName": "CLIENTES",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Nome",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', ``, 'string') }}"
+            },
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {
+          "outputFormatting": {
+            "values": {
+              "general": "UNFORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        360
+      ],
+      "id": "dcaec1bf-9950-4c62-abac-55b53ac9fa18",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "cLQGLihQjWTWEqgo",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc",
+          "mode": "list",
+          "cachedResultName": "CLIENTES",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SSA7eUBqelC9oNT1u44ALnFeoF3jDZcmTeeEws6_fyc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nome', ``, 'string') }}",
+            "Telefone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefone', ``, 'string') }}",
+            "Data de Cadastro": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Data_de_Cadastro', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data de Cadastro",
+              "displayName": "Data de Cadastro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        600,
+        360
+      ],
+      "id": "79605589-e9b7-442f-8fd8-e8b0e40ebe52",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "cLQGLihQjWTWEqgo",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pARkHYNEGIb7IhLynZQ5bIfJjaSHymO_tfsXWS-5ls8",
+          "mode": "list",
+          "cachedResultName": "PRODUTOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pARkHYNEGIb7IhLynZQ5bIfJjaSHymO_tfsXWS-5ls8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pARkHYNEGIb7IhLynZQ5bIfJjaSHymO_tfsXWS-5ls8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        400,
+        360
+      ],
+      "id": "572fc7e1-995f-4d40-bc03-f298da3775db",
+      "name": "Google Sheets2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "cLQGLihQjWTWEqgo",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "zutionfabiola@gmail.com",
+        "subject": "Novo Cliente",
+        "emailType": "text",
+        "message": "Novo cliente está aguardando atendimento.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        280
+      ],
+      "id": "c877a2b8-2876-4045-b30f-43732ffa4892",
+      "name": "Gmail",
+      "webhookId": "b8cd0ca6-41be-4d4c-9635-d2f277e5df2a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "y6o82Fqof1fahG0n",
+          "name": "Gmail account 54"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4d0f752c-a5a9-4211-a829-39063ebec022",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "999300694f1d8799534e922c809464798b510b41260a76ef48c4516def025bd8"
+  },
+  "id": "xFMeXRaya9mgpsgT",
+  "tags": []
+}
